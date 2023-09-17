@@ -7,6 +7,8 @@ import { useForm, yupResolver } from '@mantine/form';
 import { AuthForm } from '@/types';
 import axios from 'axios';
 import { Layout } from '@/components/Layout';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
+
 import {
   DatabaseIcon,
   ExclamationCircleIcon,
@@ -45,23 +47,22 @@ export default function Home() {
   const handleSubmit = async () => {
     try {
       if (isRegister) {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`),
-          {
-            email: form.values.email,
-            password: form.values.password,
-          };
-      }
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`),
-        {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
           email: form.values.email,
           password: form.values.password,
-        };
+        });
+      }
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        email: form.values.email,
+        password: form.values.password,
+      });
       form.reset();
       router.push('/dashboard');
     } catch (e: any) {
       setError(e.response.data.message);
     }
   };
+  const cookies = parseCookies();
   return (
     <Layout title="Auth">
       <ShieldCheckIcon className="h-16 w-16 text-blue-500" />
