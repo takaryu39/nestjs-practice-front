@@ -15,13 +15,14 @@ const queryClient = new QueryClient({
   },
 });
 export default function App({ Component, pageProps }: AppProps) {
-  axios.defaults.withCredentials = true; //BEとcookieのやりとりをする際に設定する。ブラウザのCookieを自動で送信するが認証セキュリティ等要注意
+  axios.defaults.withCredentials = true;
   useEffect(() => {
     const getCsrfToken = async () => {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/csrf`,
       );
       axios.defaults.headers.common['csrf-token'] = data.csrfToken;
+      console.log(data.csrfToken);
     };
     getCsrfToken();
   }, []);
